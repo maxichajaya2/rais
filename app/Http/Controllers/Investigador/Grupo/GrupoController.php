@@ -9,17 +9,37 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class GrupoController extends S3Controller {
+class GrupoController extends S3Controller
+{
+  public function coordinadorGI(Request $request)
+  {
+    $coordinador =DB::table('Grupo_integrante AS a')
+     ->select(
+       'a.id',
+       'a.investigador_id',
+       'a.condicion',
+       'a.cargo',
+       'a.fecha_inclusion',
+       'a.fecha_exclusion'
+       )
+       ->where('a.investigador_id', '=', $request->attributes->get('token_decoded')->investigador_id)
+       ->where('a.grupo_id', '=', $request->query('grupo_id'))
+       ->where('a.cargo', '=', 'Coordinador')
+      ->count();
+
+      return $coordinador;
+  }
   //  Grupos
-  public function listadoGrupos(Request $request) {
+  public function listadoGrupos(Request $request)
+  {
     $grupos = DB::table('Grupo_integrante AS a')
       ->join('Grupo AS b', 'b.id', '=', 'a.grupo_id')
       ->select(
         'b.id',
         'b.grupo_nombre',
         'b.grupo_categoria',
-        'a.condicion',
         'a.cargo',
+        'a.condicion',
         'b.resolucion_fecha',
         DB::raw("CASE(b.estado)
           WHEN -2 THEN 'Disuelto'
@@ -30,13 +50,16 @@ class GrupoController extends S3Controller {
       )
       ->where('a.investigador_id', '=', $request->attributes->get('token_decoded')->investigador_id)
       ->where('b.tipo', '=', 'grupo')
-      ->whereNot('a.condicion', 'LIKE', 'Ex%')
+      ->where('a.condicion', 'NOT LIKE', 'Ex %')
+     
       ->get();
 
     return $grupos;
   }
 
-  public function listadoSolicitudes(Request $request) {
+
+  public function listadoSolicitudes(Request $request)
+  {
     $grupos = DB::table('Grupo_integrante AS a')
       ->join('Grupo AS b', 'b.id', '=', 'a.grupo_id')
       ->select(
@@ -65,7 +88,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Solicitar grupo
-  public function verificar1(Request $request) {
+  public function verificar1(Request $request)
+  {
     $errores = [];
 
     $miembroGrupo = DB::table('Grupo_integrante AS a')
@@ -106,7 +130,8 @@ class GrupoController extends S3Controller {
     }
   }
 
-  public function registrar1(Request $request) {
+  public function registrar1(Request $request)
+  {
     if ($request->input('id')) {
       $rep = DB::table('Grupo')
         ->where('id', '!=', $request->input('id'))
@@ -177,7 +202,8 @@ class GrupoController extends S3Controller {
     }
   }
 
-  public function validarSol(Request $request, $id) {
+  public function validarSol(Request $request, $id)
+  {
     $errores = [];
 
     $miembroGrupo = DB::table('Grupo_integrante AS a')
@@ -221,7 +247,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Paso 2
-  public function verificar2(Request $request) {
+  public function verificar2(Request $request)
+  {
     $sol = $this->validarSol($request, $request->query('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -263,7 +290,8 @@ class GrupoController extends S3Controller {
     return ['estado' => true, 'datos' => $docente, 'institutos' => $institutos];
   }
 
-  public function registrar2(Request $request) {
+  public function registrar2(Request $request)
+  {
     $sol = $this->validarSol($request, $request->input('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -294,7 +322,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Paso 3
-  public function verificar3(Request $request) {
+  public function verificar3(Request $request)
+  {
     $sol = $this->validarSol($request, $request->query('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -322,7 +351,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Paso 4
-  public function verificar4(Request $request) {
+  public function verificar4(Request $request)
+  {
     $sol = $this->validarSol($request, $request->query('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -357,7 +387,8 @@ class GrupoController extends S3Controller {
     return ['estado' => true, 'datos' => $datos, 'lineas' => $lineas, 'listado' => $listado];
   }
 
-  public function registrar4(Request $request) {
+  public function registrar4(Request $request)
+  {
     $sol = $this->validarSol($request, $request->input('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -377,7 +408,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Paso 5
-  public function verificar5(Request $request) {
+  public function verificar5(Request $request)
+  {
     $sol = $this->validarSol($request, $request->query('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -404,7 +436,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Paso 6
-  public function verificar6(Request $request) {
+  public function verificar6(Request $request)
+  {
     $sol = $this->validarSol($request, $request->query('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -430,7 +463,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Paso 7
-  public function verificar7(Request $request) {
+  public function verificar7(Request $request)
+  {
     $sol = $this->validarSol($request, $request->query('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -458,7 +492,8 @@ class GrupoController extends S3Controller {
     return ['estado' => true, 'datos' => $datos, 'laboratorios' => $laboratorios];
   }
 
-  public function registrar7(Request $request) {
+  public function registrar7(Request $request)
+  {
     $sol = $this->validarSol($request, $request->input('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -502,7 +537,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Paso 8
-  public function verificar8(Request $request) {
+  public function verificar8(Request $request)
+  {
     $sol = $this->validarSol($request, $request->query('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -523,7 +559,8 @@ class GrupoController extends S3Controller {
     return ['estado' => true, 'datos' => $datos];
   }
 
-  public function registrar8(Request $request) {
+  public function registrar8(Request $request)
+  {
     $sol = $this->validarSol($request, $request->input('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -544,7 +581,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Paso 9
-  public function verificar9(Request $request) {
+  public function verificar9(Request $request)
+  {
     return ['estado' => true];
     $sol = $this->validarSol($request, $request->query('id'));
     if (sizeof($sol) > 0) {
@@ -552,7 +590,8 @@ class GrupoController extends S3Controller {
     }
   }
 
-  public function registrar9(Request $request) {
+  public function registrar9(Request $request)
+  {
     $count = DB::table('Grupo')
       ->where('id', '=', $request->input('id'))
       ->update([
@@ -566,7 +605,8 @@ class GrupoController extends S3Controller {
     }
   }
 
-  public function reporteSolicitud(Request $request) {
+  public function reporteSolicitud(Request $request)
+  {
     $sol = $this->validarSol($request, $request->query('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -641,7 +681,8 @@ class GrupoController extends S3Controller {
     }
   }
 
-  public function reporteGrupo(Request $request) {
+  public function reporteGrupo(Request $request)
+  {
     $grupo = DB::table('Grupo')
       ->select([
         'grupo_nombre',
@@ -727,7 +768,8 @@ class GrupoController extends S3Controller {
    *  Otros
    */
 
-  public function detalle(Request $request) {
+  public function detalle(Request $request)
+  {
     $detalle = DB::table('Grupo AS a')
       ->join('Facultad AS b', 'b.id', '=', 'a.facultad_id')
       ->select(
@@ -752,7 +794,8 @@ class GrupoController extends S3Controller {
     return $detalle;
   }
 
-  public function listarMiembros(Request $request) {
+  public function listarMiembros(Request $request)
+  {
     $miembros = DB::table('Grupo_integrante AS a')
       ->join('Usuario_investigador AS b', 'b.id', '=', 'a.investigador_id')
       ->leftJoin('Facultad AS c', 'c.id', '=', 'b.facultad_id')
@@ -774,7 +817,9 @@ class GrupoController extends S3Controller {
         'a.fecha_inclusion',
         'a.fecha_exclusion'
       )
-      ->where('a.grupo_id', '=', $request->query('grupo_id'));
+      ->where('a.grupo_id', '=', $request->query('grupo_id'))
+      ->orderby('a.cargo', 'DESC')
+      ->orderby('a.condicion', 'DESC');
 
     //  Tipo de miembro
     $miembros = $request->query('estado') == 1 ? $miembros->whereNot('a.condicion', 'LIKE', 'Ex%') : $miembros->where('a.condicion', 'LIKE', 'Ex%');
@@ -786,7 +831,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Miembros
-  public function incluirMiembroData(Request $request) {
+  public function incluirMiembroData(Request $request)
+  {
 
     switch ($request->query('tipo')) {
       case "estudiante":
@@ -889,7 +935,8 @@ class GrupoController extends S3Controller {
     }
   }
 
-  public function agregarMiembro(Request $request) {
+  public function agregarMiembro(Request $request)
+  {
     $id = $request->input('grupo_id');
     $date = Carbon::now();
     $name = $id . "-formato_adhesion-" . $date->format('Ymd-His');
@@ -1055,7 +1102,8 @@ class GrupoController extends S3Controller {
     }
   }
 
-  public function eliminarMiembro(Request $request) {
+  public function eliminarMiembro(Request $request)
+  {
     DB::table('Grupo_integrante')
       ->where('id', '=', $request->query('id'))
       ->delete();
@@ -1066,7 +1114,8 @@ class GrupoController extends S3Controller {
     ];
   }
 
-  public function getPaises() {
+  public function getPaises()
+  {
     $paises = DB::table('Pais')
       ->select([
         'name AS value'
@@ -1076,7 +1125,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Search
-  public function searchDocenteRrhh(Request $request) {
+  public function searchDocenteRrhh(Request $request)
+  {
     $investigadores = DB::table('Repo_rrhh AS a')
       ->leftJoin('Usuario_investigador AS b', 'b.doc_numero', '=', 'a.ser_doc_id_act')
       ->leftJoin('Licencia AS c', 'c.investigador_id', '=', 'b.id')
@@ -1123,7 +1173,8 @@ class GrupoController extends S3Controller {
     return $investigadores;
   }
 
-  public function searchEstudiante(Request $request) {
+  public function searchEstudiante(Request $request)
+  {
     $estudiantes = DB::table('Repo_sum AS a')
       ->leftJoin('Usuario_investigador AS b', 'b.codigo', '=', 'a.codigo_alumno')
       ->select(
@@ -1152,7 +1203,8 @@ class GrupoController extends S3Controller {
     return $estudiantes;
   }
 
-  public function searchEgresado(Request $request) {
+  public function searchEgresado(Request $request)
+  {
     $egresados = DB::table('Repo_sum AS a')
       ->leftJoin('Usuario_investigador AS b', 'b.codigo', '=', 'a.codigo_alumno')
       ->select(
@@ -1182,7 +1234,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Líneas
-  public function agregarLinea(Request $request) {
+  public function agregarLinea(Request $request)
+  {
     $sol = $this->validarSol($request, $request->input('grupo_id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -1197,7 +1250,8 @@ class GrupoController extends S3Controller {
     return ['message' => 'success', 'detail' => 'Línea agregada correctamente'];
   }
 
-  public function eliminarLinea(Request $request) {
+  public function eliminarLinea(Request $request)
+  {
     $sol = $this->validarSol($request, $request->query('grupo_id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -1211,7 +1265,8 @@ class GrupoController extends S3Controller {
   }
 
   //  Laboratorios
-  public function searchLaboratorio(Request $request) {
+  public function searchLaboratorio(Request $request)
+  {
     $laboratorios = DB::table('Laboratorio AS a')
       ->join('Facultad AS b', 'b.id', '=', 'a.facultad_id')
       ->select(
@@ -1230,7 +1285,8 @@ class GrupoController extends S3Controller {
     return $laboratorios;
   }
 
-  public function agregarLaboratorio(Request $request) {
+  public function agregarLaboratorio(Request $request)
+  {
     $sol = $this->validarSol($request, $request->input('grupo_id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];
@@ -1257,7 +1313,8 @@ class GrupoController extends S3Controller {
     }
   }
 
-  public function eliminarLaboratorio(Request $request) {
+  public function eliminarLaboratorio(Request $request)
+  {
     $sol = $this->validarSol($request, $request->query('id'));
     if (sizeof($sol) > 0) {
       return ['estado' => false, 'message' => $sol];

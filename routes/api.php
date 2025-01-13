@@ -711,6 +711,7 @@ Route::prefix('investigador')->middleware('checkRole:Usuario_investigador')->gro
     Route::get('listadoGrupos', [InvestigadorGrupoController::class, 'listadoGrupos']);
     Route::get('listadoSolicitudes', [InvestigadorGrupoController::class, 'listadoSolicitudes']);
     Route::get('detalle', [InvestigadorGrupoController::class, 'detalle']);
+    Route::get('coordinadorGI', [InvestigadorGrupoController::class, 'coordinadorGI']);
     Route::get('listarMiembros', [InvestigadorGrupoController::class, 'listarMiembros']);
 
     Route::get('searchEstudiante', [InvestigadorGrupoController::class, 'searchEstudiante']);
