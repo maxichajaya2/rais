@@ -552,6 +552,7 @@ class GruposController extends S3Controller {
   }
 
   public function incluirMiembroData(Request $request) {
+   
     switch ($request->query('tipo')) {
       case "titular":
         if ($request->query('investigador_id') == null) {
@@ -571,6 +572,7 @@ class GruposController extends S3Controller {
                 ->where('b.condicion', 'NOT LIKE', 'Ex%');
             })
             ->select(
+              'a.id as investigador_id',
               'a.codigo_orcid',
               'c.dependencia',
               'c.id AS dependencia_id',
@@ -593,7 +595,7 @@ class GruposController extends S3Controller {
           } else if (in_array(null, [$investigador->codigo_orcid, $investigador->dependencia, $investigador->facultad, $investigador->instituto])) {
             return [
               'message' => 'warning',
-              'detail' => 'Registro de investigador incompleto (necesita tener orcid, dependencia, facultad e instituto)'
+              'detail' => 'Registro de investigador incompleto (necesita tener orcid, dependencia, facultad e instituto)',
             ];
           } else {
             return [

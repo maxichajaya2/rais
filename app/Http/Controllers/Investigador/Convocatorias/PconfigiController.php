@@ -230,7 +230,37 @@ class PconfigiController extends S3Controller {
       }
     }
   }
+  public function eliminarPropuesta(Request $request)
+  {
+    $proyectoId = $request->query('id');
 
+    if ($proyectoId) {
+     
+      $proyectoIntegrante = DB::table('Proyecto_integrante')
+        ->where('proyecto_id', '=', $proyectoId)
+        ->delete();
+
+      $proyectoActividades = DB::table('Proyecto_actividad')
+        ->where('proyecto_id', '=', $proyectoId)
+        ->delete();
+
+      $proyectoDescripcion = DB::table('Proyecto_descripcion')
+        ->where('proyecto_id', '=', $proyectoId)
+        ->delete();
+
+      $proyectoPresupuesto = DB::table('Proyecto_presupuesto')
+        ->where('proyecto_id', '=', $proyectoId)
+        ->delete();
+
+      $proyecto= DB::table('Proyecto')
+        ->where('id', '=', $proyectoId)
+        ->delete();
+
+      return ['message' => 'info', 'detail' => 'Propuesta eliminada correctamente'];
+    } else {
+      return ['message' => 'error', 'detail' => 'No se pudo eliminar la propuesta'];
+    }
+  }
   public function verificar1(Request $request) {
     $res1 = $this->verificar($request, $request->query('id'));
     if (!$res1["estado"]) {

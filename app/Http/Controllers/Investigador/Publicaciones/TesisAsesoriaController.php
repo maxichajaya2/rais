@@ -19,6 +19,10 @@ class TesisAsesoriaController extends Controller {
         'a.titulo',
         DB::raw('YEAR(a.fecha_publicacion) AS año_publicacion'),
         'b.puntaje',
+        DB::raw("CASE(b.filiacion)
+        WHEN 1 THEN 'Si'
+        WHEN 0 THEN 'No'
+      ELSE 'Sin Especificar' END AS filiacion"),
         'a.observaciones_usuario',
         DB::raw("CASE(a.estado)
             WHEN -1 THEN 'Eliminado'

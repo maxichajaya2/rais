@@ -732,7 +732,7 @@ Route::prefix('investigador')->middleware('checkRole:Usuario_investigador')->gro
       Route::get('validarDatos', [PconfigiController::class, 'validarDatos']);
 
       Route::get('verificar', [PconfigiController::class, 'verificar']);
-
+      Route::delete('eliminarPropuesta', [PconfigiController::class, 'eliminarPropuesta']);
       Route::get('verificar1', [PconfigiController::class, 'verificar1']);
       Route::post('registrar1', [PconfigiController::class, 'registrar1']);
 

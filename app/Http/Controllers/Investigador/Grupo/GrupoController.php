@@ -909,7 +909,7 @@ class GrupoController extends S3Controller
           } else if (in_array(null, [$investigador->codigo_orcid, $investigador->dependencia, $investigador->facultad, $investigador->instituto])) {
             return [
               'message' => 'warning',
-              'detail' => 'Registro de investigador incompleto (necesita tener orcid, dependencia, facultad e instituto)'
+              'detail' => 'Registro de investigador incompleto (necesita tener orcid, dependencia, facultad e instituto)'.$investigador->facultad
             ];
           } else {
             return [

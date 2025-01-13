@@ -20,6 +20,10 @@ class ArticulosController extends S3Controller {
         DB::raw("IF(a.publicacion_nombre IS NULL OR a.publicacion_nombre = '',CONCAT(c.revista,' ',c.issn),CONCAT(a.publicacion_nombre,' ',a.issn)) AS revista"),
         DB::raw('YEAR(a.fecha_publicacion) AS año_publicacion'),
         'b.puntaje',
+        DB::raw("CASE(b.filiacion)
+            WHEN 1 THEN 'Si'
+            WHEN 0 THEN 'No'
+          ELSE 'Sin Especificar' END AS filiacion"),
         'a.observaciones_usuario',
         DB::raw("CASE(a.estado)
             WHEN -1 THEN 'Eliminado'
@@ -42,7 +46,6 @@ class ArticulosController extends S3Controller {
 
     return ['data' => $publicaciones];
   }
-
   public function registrarPaso1(Request $request) {
     if ($request->input('publicacion_id') == null) {
 

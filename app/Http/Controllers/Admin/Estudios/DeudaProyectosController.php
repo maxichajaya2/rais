@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DeudaProyectosController extends Controller {
+ 
   public function listadoIntegrantes(Request $request) {
     if ($request->query('tabla') == "Nuevo") {
       $integrantes = DB::table('Proyecto_integrante AS a')

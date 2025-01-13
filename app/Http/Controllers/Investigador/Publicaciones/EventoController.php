@@ -8,9 +8,11 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class EventoController extends Controller {
+class EventoController extends Controller
+{
 
-  public function listado(Request $request) {
+  public function listado(Request $request)
+  {
     $publicaciones = DB::table('Publicacion AS a')
       ->leftJoin('Publicacion_autor AS b', 'b.publicacion_id', '=', 'a.id')
       ->leftJoin('Publicacion_revista AS c', 'c.issn', '=', 'a.issn')
@@ -20,6 +22,10 @@ class EventoController extends Controller {
         DB::raw("IF(a.publicacion_nombre IS NULL OR a.publicacion_nombre = '',CONCAT(c.revista,' ',c.issn),CONCAT(a.publicacion_nombre,' ',a.issn)) AS revista"),
         DB::raw('YEAR(a.fecha_publicacion) AS año_publicacion'),
         'b.puntaje',
+        DB::raw("CASE(b.filiacion)
+        WHEN 1 THEN 'Si'
+        WHEN 0 THEN 'No'
+      ELSE 'Sin Especificar' END AS filiacion"),
         'a.observaciones_usuario',
         DB::raw("CASE(a.estado)
             WHEN -1 THEN 'Eliminado'
@@ -43,7 +49,8 @@ class EventoController extends Controller {
     return ['data' => $publicaciones];
   }
 
-  public function registrarPaso1(Request $request) {
+  public function registrarPaso1(Request $request)
+  {
     if ($request->input('publicacion_id') == null) {
       $publicacion_id = DB::table('Publicacion')->insertGetId([
         'titulo' => $request->input('titulo'),
@@ -136,7 +143,8 @@ class EventoController extends Controller {
     }
   }
 
-  public function datosPaso1(Request $request) {
+  public function datosPaso1(Request $request)
+  {
     $esAutor = DB::table('Publicacion_autor')
       ->where('publicacion_id', '=', $request->query('publicacion_id'))
       ->where('investigador_id', '=', $request->attributes->get('token_decoded')->investigador_id)
@@ -188,7 +196,8 @@ class EventoController extends Controller {
     }
   }
 
-  public function reporte(Request $request) {
+  public function reporte(Request $request)
+  {
     $publicacion = DB::table('Publicacion')
       ->select([
         'codigo_registro',
@@ -236,7 +245,8 @@ class EventoController extends Controller {
     return $pdf->stream();
   }
 
-  public function searchTitulo(Request $request) {
+  public function searchTitulo(Request $request)
+  {
     $publicaciones = DB::table('Publicacion')
       ->select([
         'id',
