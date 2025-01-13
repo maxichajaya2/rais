@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DeudaProyectosController extends Controller {
- 
-  public function listadoIntegrantes(Request $request) {
+class DeudaProyectosController extends Controller
+{
+
+  public function listadoIntegrantes(Request $request)
+  {
     if ($request->query('tabla') == "Nuevo") {
       $integrantes = DB::table('Proyecto_integrante AS a')
         ->join('Proyecto_integrante_tipo AS b', 'b.id', '=', 'a.proyecto_integrante_tipo_id')
@@ -27,7 +29,8 @@ class DeudaProyectosController extends Controller {
           'f.categoria AS tipo_deuda',
           'f.informe',
           'f.detalle',
-          'f.fecha_sub'
+          'f.fecha_sub',
+          'f.fecha_deuda'
         )
         ->where('a.proyecto_id', '=', $request->query('id'))
         ->get();
@@ -59,7 +62,8 @@ class DeudaProyectosController extends Controller {
     }
   }
 
-  public function listadoProyectos() {
+  public function listadoProyectos()
+  {
     $deudas = DB::table('view_proyectos')
       ->select([
         DB::raw("CONCAT(proyecto_origen, '_', proyecto_id) AS id"),
@@ -73,6 +77,7 @@ class DeudaProyectosController extends Controller {
         'periodo',
         'xtitulo AS titulo',
         'facultad',
+        'responsable',
         DB::raw("CASE
           WHEN (deuda IS NULL OR deuda <= 0) THEN 'NO'
           WHEN deuda > 0 AND deuda <= 3 THEN 'SI'
@@ -89,7 +94,8 @@ class DeudaProyectosController extends Controller {
     return $deudas;
   }
 
-  public function listadoProyectosNoDeuda() {
+  public function listadoProyectosNoDeuda()
+  {
     $responsable = DB::table('Proyecto_integrante AS a')
       ->leftJoin('Usuario_investigador AS b', 'b.id', '=', 'a.investigador_id')
       ->select(
@@ -122,7 +128,8 @@ class DeudaProyectosController extends Controller {
     return $lista;
   }
 
-  public function listadoDeudaAcademica(Request $request) {
+  public function listadoDeudaAcademica(Request $request)
+  {
 
     $opciones = [];
     $tipoProyecto = $request->query('tipo_proyecto');
@@ -215,7 +222,18 @@ class DeudaProyectosController extends Controller {
           '0' => 'Sin deuda',
         ];
         break;
-
+      case 'ECI':
+        $opciones = [
+          'Informe académico' => 'Informe académico',
+          '0' => 'Sin deuda',
+        ];
+        break;
+      case 'PRO-CTIE':
+        $opciones = [
+          'Informe académico' => 'Informe académico',
+          '0' => 'Sin deuda',
+        ];
+        break;
       default:
         $opciones = [];
         break;
@@ -225,7 +243,8 @@ class DeudaProyectosController extends Controller {
       'opciones' => $opciones
     ]);
   }
-  public function getResponsableProyecto($tipoProyecto) {
+  public function getResponsableProyecto($tipoProyecto)
+  {
     $tipoIntegrante = [];
 
     switch ($tipoProyecto) {
@@ -305,7 +324,8 @@ class DeudaProyectosController extends Controller {
     return $tipoIntegrante;
   }
 
-  public function asignarDeuda(Request $request) {
+  public function asignarDeuda(Request $request)
+  {
 
     $proyectoId = $request->input('proyecto_id');
     $tipoProyecto = $request->input('tipo_proyecto');
@@ -624,7 +644,8 @@ class DeudaProyectosController extends Controller {
     }
   }
 
-  public function proyectoDeuda(Request $request) {
+  public function proyectoDeuda(Request $request)
+  {
     $proyectoId = $request->query('proyecto_id');
     $proyectoOrigen = $request->query('proyecto_origen');
     $tipoProyecto = $request->query('tipo_proyecto');
@@ -764,7 +785,8 @@ class DeudaProyectosController extends Controller {
     ]);
   }
 
-  public function getResponsable($tipoProyecto, $proyectoId) {
+  public function getResponsable($tipoProyecto, $proyectoId)
+  {
     $integrantes = DB::table('Proyecto_integrante as pint')
       ->join('Proyecto_integrante_deuda as pind', 'pind.proyecto_integrante_id', '=', 'pint.id')
       ->select('*')
@@ -781,7 +803,8 @@ class DeudaProyectosController extends Controller {
       }
     }
   }
-  public function getTipoDeuda(Request $request) {
+  public function getTipoDeuda(Request $request)
+  {
     $proyectoId = $request->query('proyecto_id');
     $proyectoOrigen = $request->query('proyecto_origen');
     $tipoProyecto = $request->query('tipo_proyecto');
@@ -793,7 +816,8 @@ class DeudaProyectosController extends Controller {
     }
   }
 
-  public function subsanarDeuda(Request $request) {
+  public function subsanarDeuda(Request $request)
+  {
     $proyectoId = $request->input('proyecto_id');
     $tipoProyecto = $request->input('tipo_proyecto');
     $proyectoOrigen = $request->input('proyecto_origen');
