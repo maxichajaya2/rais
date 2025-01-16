@@ -75,6 +75,43 @@ class PicvController extends Controller {
     return $integrantes;
   }
 
+  public function listarIntegrantes(Request $request) {
+
+    $integrantes = DB::table('Proyecto_integrante AS a')
+      ->join('Proyecto_integrante_tipo AS b', 'b.id', '=', 'a.proyecto_integrante_tipo_id')
+      ->join('Usuario_investigador AS c', 'c.id', '=', 'a.investigador_id')
+      ->leftJoin('Facultad AS d', 'd.id', '=', 'c.facultad_id')
+      ->leftJoin('File AS e', function ($join) {
+        $join->on('e.tabla_id', '=', 'a.id')
+          ->where('e.tabla', '=', 'Proyecto_integrante')
+          ->where('e.estado', '=', 1);
+      })
+      ->select([
+        'a.id',
+        'b.nombre AS tipo_integrante',
+        DB::raw("CONCAT(c.apellido1, ' ', c.apellido2, ', ', c.nombres) AS nombre"),
+        'c.tipo',
+        'd.nombre AS facultad',
+        DB::raw("CONCAT('/minio/', e.bucket, '/', e.key) AS url")
+      ])
+      ->where('a.proyecto_id', '=', $request->query('proyecto_id'))
+      ->get();
+
+    $key = DB::table('Proyecto_doc')
+      ->select([
+        'archivo',
+      ])
+      ->where('proyecto_id', '=', $request->query('proyecto_id'))
+      ->where('categoria', '=', 'carta')
+      ->where('nombre', '=', 'Carta de compromiso del asesor')
+      ->where('estado', '=', 1)
+      ->first();
+
+    $integrantes[0]->url = "/minio/proyecto-doc/" . $key->archivo;
+
+    return $integrantes;
+  }
+  
   public function descripcion(Request $request) {
     $descripcion = DB::table('Proyecto_descripcion')
       ->select(

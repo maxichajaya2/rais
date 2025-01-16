@@ -10,9 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-class PconfigiController extends S3Controller {
+class PconfigiController extends S3Controller
+{
 
-  public function listado(Request $request) {
+  public function listado(Request $request)
+  {
     $listado = DB::table('Proyecto_integrante AS a')
       ->join('Proyecto AS b', 'b.id', '=', 'a.proyecto_id')
       ->select([
@@ -42,7 +44,8 @@ class PconfigiController extends S3Controller {
     return $listado;
   }
 
-  public function validarDatos(Request $request) {
+  public function validarDatos(Request $request)
+  {
     $errores = [];
     $detail = null;
 
@@ -118,7 +121,8 @@ class PconfigiController extends S3Controller {
     return ['estado' => empty($errores), 'errores' => $errores];
   }
 
-  public function verificar(Request $request, $proyecto_id = null) {
+  public function verificar(Request $request, $proyecto_id = null)
+  {
     $errores = [];
     $detail = null;
 
@@ -235,7 +239,7 @@ class PconfigiController extends S3Controller {
     $proyectoId = $request->query('id');
 
     if ($proyectoId) {
-     
+
       $proyectoIntegrante = DB::table('Proyecto_integrante')
         ->where('proyecto_id', '=', $proyectoId)
         ->delete();
@@ -252,7 +256,7 @@ class PconfigiController extends S3Controller {
         ->where('proyecto_id', '=', $proyectoId)
         ->delete();
 
-      $proyecto= DB::table('Proyecto')
+      $proyecto = DB::table('Proyecto')
         ->where('id', '=', $proyectoId)
         ->delete();
 
@@ -261,7 +265,8 @@ class PconfigiController extends S3Controller {
       return ['message' => 'error', 'detail' => 'No se pudo eliminar la propuesta'];
     }
   }
-  public function verificar1(Request $request) {
+  public function verificar1(Request $request)
+  {
     $res1 = $this->verificar($request, $request->query('id'));
     if (!$res1["estado"]) {
       return $res1;
@@ -340,7 +345,8 @@ class PconfigiController extends S3Controller {
     }
   }
 
-  public function registrar1(Request $request) {
+  public function registrar1(Request $request)
+  {
     $date = Carbon::now();
     if ($request->input('id')) {
       DB::table('Proyecto')
@@ -426,7 +432,8 @@ class PconfigiController extends S3Controller {
     }
   }
 
-  public function verificar2(Request $request) {
+  public function verificar2(Request $request)
+  {
     $res1 = $this->verificar($request, $request->query('id'));
     if (!$res1["estado"]) {
       return $res1;
@@ -447,7 +454,8 @@ class PconfigiController extends S3Controller {
     ];
   }
 
-  public function agregarDoc(Request $request) {
+  public function agregarDoc(Request $request)
+  {
     if ($request->hasFile('file')) {
       $date = Carbon::now();
       $date1 = Carbon::now();
@@ -473,7 +481,8 @@ class PconfigiController extends S3Controller {
     }
   }
 
-  public function eliminarDoc(Request $request) {
+  public function eliminarDoc(Request $request)
+  {
     DB::table('Proyecto_doc')
       ->where('id', '=', $request->query('id'))
       ->delete();
@@ -481,7 +490,8 @@ class PconfigiController extends S3Controller {
     return ['message' => 'info', 'detail' => 'Documento eliminado correctamente'];
   }
 
-  public function verificar3(Request $request) {
+  public function verificar3(Request $request)
+  {
     $res1 = $this->verificar($request, $request->query('id'));
     if (!$res1["estado"]) {
       return $res1;
@@ -536,7 +546,8 @@ class PconfigiController extends S3Controller {
     ];
   }
 
-  public function registrar3(Request $request) {
+  public function registrar3(Request $request)
+  {
     DB::table('Proyecto_descripcion')->updateOrInsert(['codigo' => 'resumen_ejecutivo', 'proyecto_id' => $request->input('id')], ['detalle' => $request->input('resumen_ejecutivo')]);
     DB::table('Proyecto_descripcion')->updateOrInsert(['codigo' => 'antecedentes', 'proyecto_id' => $request->input('id')], ['detalle' => $request->input('antecedentes')]);
     DB::table('Proyecto_descripcion')->updateOrInsert(['codigo' => 'justificacion', 'proyecto_id' => $request->input('id')], ['detalle' => $request->input('justificacion')]);
@@ -583,7 +594,8 @@ class PconfigiController extends S3Controller {
     return ['message' => 'success', 'detail' => 'Datos guardados'];
   }
 
-  public function verificar4(Request $request) {
+  public function verificar4(Request $request)
+  {
     $res1 = $this->verificar($request, $request->query('id'));
     if (!$res1["estado"]) {
       return $res1;
@@ -602,7 +614,8 @@ class PconfigiController extends S3Controller {
     return ['estado' => true, 'actividades' => $actividades];
   }
 
-  public function addActividad(Request $request) {
+  public function addActividad(Request $request)
+  {
     DB::table('Proyecto_actividad')
       ->insert([
         'proyecto_id' => $request->input('id'),
@@ -614,7 +627,8 @@ class PconfigiController extends S3Controller {
     return ['message' => 'info', 'detail' => 'Actividad añadida'];
   }
 
-  public function eliminarActividad(Request $request) {
+  public function eliminarActividad(Request $request)
+  {
     DB::table('Proyecto_actividad')
       ->where('id', '=', $request->query('id'))
       ->delete();
@@ -622,7 +636,8 @@ class PconfigiController extends S3Controller {
     return ['message' => 'info', 'detail' => 'Actividad eliminada'];
   }
 
-  public function editActividad(Request $request) {
+  public function editActividad(Request $request)
+  {
     DB::table('Proyecto_actividad')
       ->where('id', '=', $request->input('id'))
       ->update([
@@ -635,7 +650,8 @@ class PconfigiController extends S3Controller {
   }
 
 
-  public function verificar5(Request $request) {
+  public function verificar5(Request $request)
+  {
     $errores = [];
 
     $res1 = $this->verificar($request, $request->query('id'));
@@ -719,7 +735,8 @@ class PconfigiController extends S3Controller {
     ];
   }
 
-  public function verificarPresupuesto(Request $request) {
+  public function verificarPresupuesto(Request $request)
+  {
 
     $presupuesto = DB::table('Proyecto_presupuesto AS a')
       ->select([
@@ -735,7 +752,8 @@ class PconfigiController extends S3Controller {
 
     return $presupuesto;
   }
-  public function agregarPartida(Request $request) {
+  public function agregarPartida(Request $request)
+  {
     $date = Carbon::now();
 
     DB::table('Proyecto_presupuesto')
@@ -751,7 +769,8 @@ class PconfigiController extends S3Controller {
     return ['message' => 'success', 'detail' => 'Partida agregada correctamente'];
   }
 
-  public function actualizarPartida(Request $request) {
+  public function actualizarPartida(Request $request)
+  {
     $date = Carbon::now();
 
     DB::table('Proyecto_presupuesto')
@@ -766,7 +785,8 @@ class PconfigiController extends S3Controller {
     return ['message' => 'info', 'detail' => 'Partida actualizada correctamente'];
   }
 
-  public function eliminarPartida(Request $request) {
+  public function eliminarPartida(Request $request)
+  {
     DB::table('Proyecto_presupuesto')
       ->where('id', '=', $request->query('id'))
       ->delete();
@@ -774,7 +794,8 @@ class PconfigiController extends S3Controller {
     return ['message' => 'info', 'detail' => 'Partida eliminada correctamente'];
   }
 
-  public function verificar6(Request $request) {
+  public function verificar6(Request $request)
+  {
     $res1 = $this->verificar($request, $request->query('id'));
     if (!$res1["estado"]) {
       return $res1;
@@ -813,7 +834,8 @@ class PconfigiController extends S3Controller {
     ];
   }
 
-  public function verificar7(Request $request) {
+  public function verificar7(Request $request)
+  {
     $res1 = $this->verificar($request, $request->query('id'));
     if (!$res1["estado"]) {
       return $res1;
@@ -837,7 +859,11 @@ class PconfigiController extends S3Controller {
     return ['estado' => true, 'integrantes' => $integrantes];
   }
 
-  public function listadoGrupoDocente(Request $request) {
+  public function listadoGrupoDocente(Request $request)
+  {
+
+    $investigadorId = $request->attributes->get('token_decoded')->investigador_id;
+
     $grupo = DB::table('Grupo_integrante')
       ->select([
         'grupo_id'
@@ -846,6 +872,18 @@ class PconfigiController extends S3Controller {
       ->whereNot('condicion', 'LIKE', 'Ex%')
       ->first();
 
+    if ( $investigadorId == 2512) {
+      $grupo= DB::table('Grupo_integrante')
+        ->select([
+          'grupo_id'
+        ])
+        ->where('investigador_id', '=', $request->attributes->get('token_decoded')->investigador_id)
+        ->whereNot('condicion', 'LIKE', 'Ex%')
+        ->skip(1) // Salta el primer registro
+        ->take(1) // Toma un solo registro después de saltar
+        ->get();
+    }
+    
     $listado = Db::table('Grupo_integrante AS a')
       ->join('Usuario_investigador AS b', 'b.id', '=', 'a.investigador_id')
       ->select(
@@ -864,7 +902,8 @@ class PconfigiController extends S3Controller {
     return $listado;
   }
 
-  public function listadoGrupoExterno(Request $request) {
+  public function listadoGrupoExterno(Request $request)
+  {
     $grupo = DB::table('Grupo_integrante')
       ->select([
         'grupo_id'
@@ -891,7 +930,8 @@ class PconfigiController extends S3Controller {
     return $listado;
   }
 
-  public function listadoGrupoEstudiante(Request $request) {
+  public function listadoGrupoEstudiante(Request $request)
+  {
     $grupo = DB::table('Grupo_integrante')
       ->select([
         'grupo_id'
@@ -918,7 +958,8 @@ class PconfigiController extends S3Controller {
     return $listado;
   }
 
-  public function agregarIntegrante(Request $request) {
+  public function agregarIntegrante(Request $request)
+  {
     $tipoIntegrante = $request->input('proyecto_integrante_tipo_id');
     $responsable = 0;
     $corresponsable = 0;
@@ -1075,7 +1116,8 @@ class PconfigiController extends S3Controller {
     }
   }
 
-  public function eliminarIntegrante(Request $request) {
+  public function eliminarIntegrante(Request $request)
+  {
     DB::table('Proyecto_integrante')
       ->where('id', '=', $request->query('id'))
       ->delete();
@@ -1083,7 +1125,8 @@ class PconfigiController extends S3Controller {
     return ['message' => 'info', 'detail' => 'Integrante eliminado'];
   }
 
-  public function verificar8(Request $request) {
+  public function verificar8(Request $request)
+  {
     $res1 = $this->verificar($request, $request->query('id'));
     if (!$res1["estado"]) {
       return $res1;
@@ -1092,7 +1135,8 @@ class PconfigiController extends S3Controller {
     return ['estado' => true];
   }
 
-  public function reporte(Request $request) {
+  public function reporte(Request $request)
+  {
     $proyecto = DB::table('Proyecto AS a')
       ->leftJoin('Grupo AS b', function (JoinClause $join) {
         $join->on('a.grupo_id', '=', 'b.id')
@@ -1188,7 +1232,8 @@ class PconfigiController extends S3Controller {
     return $pdf->stream();
   }
 
-  public function enviar(Request $request) {
+  public function enviar(Request $request)
+  {
     $count = DB::table('Proyecto')
       ->where('id', '=', $request->input('id'))
       ->where('estado', '=', 6)

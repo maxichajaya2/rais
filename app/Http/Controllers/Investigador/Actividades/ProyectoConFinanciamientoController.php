@@ -36,6 +36,7 @@ class ProyectoConFinanciamientoController extends Controller {
       )
       ->where('b.investigador_id', '=', $request->attributes->get('token_decoded')->investigador_id)
       ->whereIn('a.tipo_proyecto', ['PCONFIGI', 'PCONFIGI-INV', 'PINTERDIS', 'PRO-CTIE'])
+      ->where('a.estado', '>', 0)
       ->orderByDesc('a.periodo')
       ->get();
 

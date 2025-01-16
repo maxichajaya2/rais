@@ -35,7 +35,8 @@ class ProyectoSinFinanciamientoController extends Controller {
         DB::raw("'no' AS antiguo")
       )
       ->where('b.investigador_id', '=', $request->attributes->get('token_decoded')->investigador_id)
-      ->whereIn('a.tipo_proyecto', ['PSINFINV', 'PSINFIPU'])
+      ->where('a.estado', '>', 0)
+      ->whereIn('a.tipo_proyecto', ['PSINFINV', 'PSINFIPU' ,'PICV'])
       ->orderByDesc('a.periodo')
       ->get();
 

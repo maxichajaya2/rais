@@ -32,6 +32,7 @@ class Informe_economicoController extends S3Controller {
       ->where('a.periodo', '>', 2017)
       ->whereNotIn('a.tipo_proyecto', ['PSINFINV', 'PSINFIPU'])
       ->where('d.id', '=', $request->attributes->get('token_decoded')->investigador_id)
+      ->orderBy('a.periodo', 'desc')
       ->get();
 
     return $proyectos;
@@ -76,14 +77,26 @@ class Informe_economicoController extends S3Controller {
 
       if ($rendido->total <= $rendido->rendido) {
         $porcentaje = 100;
+        $actualizarEstado= DB::table('Geco_proyecto')
+          ->where('id', '=', $request->query('id'))
+          ->update([
+            'estado' => 1
+          ]);
       } else {
         $porcentaje = round(($rendido->rendido / $rendido->total) * 100, 2);
+        
+        $actualizarEstado= DB::table('Geco_proyecto')
+          ->where('id', '=', $request->query('id'))
+          ->update([
+            'estado' => 0
+          ]);
       }
 
       $partidas = DB::table('Geco_proyecto_presupuesto AS a')
         ->join('Partida AS b', 'b.id', '=', 'a.partida_id')
         ->where('a.geco_proyecto_id', '=', $request->query('id'))
         ->where('b.tipo', '!=', 'Otros')
+        ->orderBy('b.tipo')
         ->count();
 
       $comprobantes_aprobados = DB::table('Geco_documento')
@@ -110,6 +123,7 @@ class Informe_economicoController extends S3Controller {
         ])
         ->where('a.geco_proyecto_id', '=', $request->query('id'))
         ->where('b.tipo', '!=', 'Otros')
+        ->orderBy('b.tipo')
         // ->where(function ($query) {
         //   $query
         //     ->orWhere('a.partida_nueva', '!=', '1')

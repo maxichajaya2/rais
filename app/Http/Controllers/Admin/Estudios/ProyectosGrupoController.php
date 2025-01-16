@@ -144,7 +144,7 @@ class ProyectosGrupoController extends S3Controller {
 
         $detalle = $ctrl->detalle($request);
         $descripcion = $ctrl->descripcion($request);
-        $miembros = $ctrl->miembros($request);
+        $miembros = $ctrl->listarIntegrantes($request);
         $documentos = $ctrl->documentos($request);
         $actividades = $ctrl->actividades($request);
 
