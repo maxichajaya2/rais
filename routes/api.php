@@ -348,6 +348,9 @@ Route::prefix('admin')->middleware('checkRole:Usuario_admin')->group(function ()
     Route::prefix('comprobantes')->group(function () {
       Route::get('listadoProyectos', [GestionComprobantesController::class, 'listadoProyectos']);
       Route::get('detalleProyecto', [GestionComprobantesController::class, 'detalleProyecto']);
+      Route::get('detalleGasto', [GestionComprobantesController::class, 'detalleGasto']);
+      Route::get('detalles', [GestionComprobantesController::class, 'detalles']);
+      Route::get('hojaResumen', [GestionComprobantesController::class, 'hojaResumen']);
       Route::get('listadoComprobantes', [GestionComprobantesController::class, 'listadoComprobantes']);
       Route::get('listadoPartidasComprobante', [GestionComprobantesController::class, 'listadoPartidasComprobante']);
       Route::put('updateEstadoComprobante', [GestionComprobantesController::class, 'updateEstadoComprobante']);

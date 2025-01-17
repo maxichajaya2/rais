@@ -234,6 +234,14 @@ class DeudaProyectosController extends Controller
           '0' => 'Sin deuda',
         ];
         break;
+      case 'Tesis':
+        $opciones = [
+          'Presentó informe de avance' => 'Presentó informe de avance',
+          'Presentó informe de avance final' => 'Presentó informe de avance final',
+          'Presentó informe acádemico' => 'Presentó informe acádemico',
+          '0' => 'Sin deuda',
+        ];
+        break;
       default:
         $opciones = [];
         break;
@@ -314,6 +322,10 @@ class DeudaProyectosController extends Controller
 
       case 'SPINOFF':
         $tipoIntegrante = [83];
+        break;
+      
+      case 'Tesis':
+        $tipoIntegrante = [19];
         break;
 
       default:
@@ -424,6 +436,9 @@ class DeudaProyectosController extends Controller
         $tipoIntegrante = [83, 84, 85];
         break;
 
+      // case 'Tesis':
+      //   $tipoIntegrante = ['Asesor', 'Co Resposable', 'Colaborador','Colaborador' ,'Corresponsable'];
+      //   break;
       default:
         $tipoIntegrante = [];
         break;
@@ -431,10 +446,14 @@ class DeudaProyectosController extends Controller
 
     if ($proyectoOrigen == 'Nuevo') {
 
-      $integrantes = DB::table('Proyecto_integrante')
+      $integrantes = DB::table('Proyecto_integrante_H')
         ->where('proyecto_id', $proyectoId)
-        ->whereIn('proyecto_integrante_tipo_id', $tipoIntegrante)
+        ->whereIn('condicion', $tipoIntegrante)
         ->get();
+
+        // $integrantes_h= DB::table('Proyecto_integrante_H')
+        // ->where('proyecto_id', $proyectoId)
+        // ->whereIn('condicion', $tipoIntegrante)
 
 
       foreach ($integrantes as $integrante) {

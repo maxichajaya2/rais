@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class DeudaController extends Controller {
   public function listado(Request $request) {
+   
     $deudas = DB::table('Proyecto_integrante AS a')
       ->join('Proyecto_integrante_deuda AS b', 'b.proyecto_integrante_id', '=', 'a.id')
       ->join('Proyecto AS c', 'c.id', '=', 'a.proyecto_id')
@@ -29,7 +30,7 @@ class DeudaController extends Controller {
       ])
       ->where('a.investigador_id', '=', $request->attributes->get('token_decoded')->investigador_id)
       ->whereIn('b.tipo', [1, 2, 3])
-      ->whereNull('b.fecha_sub')
+      // ->whereNull('b.fecha_sub')
       ->get();
 
     return $deudas;

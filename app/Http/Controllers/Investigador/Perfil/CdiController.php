@@ -679,6 +679,7 @@ class CdiController extends S3Controller {
         'eval_docente_investigador_id' => $eval_id
       ]);
 
+    
     return ['message' => 'success', 'detail' => 'Solicitud enviada con éxito'];
   }
 
