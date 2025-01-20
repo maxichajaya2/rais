@@ -126,6 +126,7 @@ class ConvocatoriasController extends Controller {
         'estado'
       )
       ->where('evento', '=', 'registro')
+      ->orderBy('id', 'desc')
       ->get();
 
     return ['data' => $convocatorias];

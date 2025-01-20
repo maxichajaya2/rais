@@ -140,10 +140,11 @@
         .extra-1,
         .extra-2,
         {
-            font-size: 12px;
+        font-size: 12px;
 
         }
-        .extra-firma{
+
+        .extra-firma {
             font-size: 14px;
         }
 
@@ -155,7 +156,169 @@
             font-size: 10px;
         }
     </style>
+    {{-- <style>
+        * {
+            font-family: Helvetica;
+        }
 
+        @page {
+            margin: 165px 20px 20px 20px;
+        }
+
+        .head-1 {
+            position: fixed;
+            top: -135px;
+            left: 0px;
+            height: 90px;
+        }
+
+        .head-1 img {
+            margin-left: 120px;
+            height: 85px;
+        }
+
+        .head-2 {
+            position: fixed;
+            top: -135px;
+            right: 0;
+        }
+
+        .head-2 p {
+            text-align: right;
+        }
+
+        .head-2 .rais {
+            font-size: 11px;
+            margin-bottom: 0;
+        }
+
+        .head-2 .fecha {
+            font-size: 5px;
+            margin-top: 0;
+        }
+
+        .head-2 .user {
+            font-size: 11px;
+            margin-top: 0;
+        }
+
+        .foot-1 {
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            text-align: left;
+            font-size: 11px;
+            font-style: oblique;
+        }
+
+        .div {
+            position: fixed;
+            top: -45px;
+            width: 100%;
+            height: 0.5px;
+            background: #000;
+        }
+
+        .titulo {
+            width: 754px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .texto {
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .table1 {
+            width: 100%;
+            border-collapse: separate;
+        }
+
+        .table1>tbody {
+            border-bottom: 1.5px solid #000;
+        }
+
+        .table1>thead {
+            margin-top: -1px;
+            font-size: 10px;
+            border-top: 1.5px solid #000;
+            border-bottom: 1.5px solid #000;
+        }
+
+        .table1>thead th {
+            font-weight: normal;
+        }
+
+        .table1>tbody td {
+            font-size: 10px;
+            text-align: center;
+            padding-top: 2px;
+        }
+
+        .table2 {
+            width: 100%;
+            border-collapse: separate;
+            margin-bottom: 40px;
+        }
+
+        .table2>thead {
+            margin-top: -1px;
+            font-size: 10px;
+            border-bottom: 1.5px solid #000;
+        }
+
+        .table2>thead th {
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .table2>tbody td {
+            font-size: 10px;
+            padding-top: 2px;
+        }
+
+        .extra-1 {
+            font-size: 11px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .extra-2 {
+            font-size: 11px;
+            text-align: right;
+            width: 100%;
+        }
+
+        .extra-firma {
+            font-size: 11px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .titulo_proyecto {
+            font-weight: bold;
+            font-style: oblique;
+        }
+
+        .nom_grupo {
+            background: #D7DFDF;
+            font-size: 10px;
+            padding: 2px;
+            margin: 0 1px;
+            border-top: 1.5px solid #000;
+        }
+
+        .nom_grupo>p {
+            margin: 1px 5px;
+        }
+
+        .fac_grupo {
+            font-size: 10px;
+            margin: 2px;
+            text-align: right;
+        }
+    </style> --}}
 </head>
 
 
@@ -278,7 +441,7 @@
                     </tr>
                 @endforeach
             @endif
-            @if(count($pmulti) > 0)
+            @if (count($pmulti) > 0)
                 <tr>
                     <td colspan="5" style="text-align: left; font-weight: bold; font-size: 15px;">
                         Proyectos Multidisciplinarios
@@ -349,14 +512,14 @@
             @endif
             {{-- Fondos Concursables --}}
             @if ($otras_actividades != 0)
-            <tr>
-                <td colspan="100%" style="margin: 0;padding: 0;">
-                    <h2
-                        style="width: 100%; padding: 10px; background-color: #f5f5f5; border: 1px solid #ddd; border-radius: 10px; ">
-                        II. Otras actividades de Investigación
-                    </h2>
-                </td>
-            </tr>
+                <tr>
+                    <td colspan="100%" style="margin: 0;padding: 0;">
+                        <h2
+                            style="width: 100%; padding: 10px; background-color: #f5f5f5; border: 1px solid #ddd; border-radius: 10px; ">
+                            II. Otras actividades de Investigación
+                        </h2>
+                    </td>
+                </tr>
             @endif
             {{-- Proyectos de Publicacion --}}
             @if (count($publicaciones) > 0)
@@ -395,14 +558,14 @@
             @endif
 
             @if ($externos > 0)
-            <tr>
-                <td colspan="100%" style="margin: 0;padding: 0;">
-                    <h2
-                        style="width: 100%; padding: 10px; background-color: #f5f5f5; border: 1px solid #ddd; border-radius: 10px; ">
-                        III. Fondos Externos
-                    </h2>
-                </td>
-            </tr>
+                <tr>
+                    <td colspan="100%" style="margin: 0;padding: 0;">
+                        <h2
+                            style="width: 100%; padding: 10px; background-color: #f5f5f5; border: 1px solid #ddd; border-radius: 10px; ">
+                            III. Fondos Externos
+                        </h2>
+                    </td>
+                </tr>
             @endif
             {{-- Proyectos con Fondos Externos --}}
             @if (count($fondos_externos) > 0)

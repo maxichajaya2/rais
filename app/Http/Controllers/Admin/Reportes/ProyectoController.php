@@ -8,6 +8,19 @@ use Illuminate\Support\Facades\DB;
 
 class ProyectoController extends Controller {
   public function reporte($facultad, $tipo, $periodo) {
+
+    
+    $facultadx = DB::tabl('Facultad')->where('id', '=', $facultad)->first();
+
+    switch($tipo) {
+      case 'PCONFIGI':
+        $tipo = 'Proyectos de Investigación con Financiamiento para Grupos de Investigación Año';
+        break;
+      default:
+        $tipo = 'Desconocido';
+        break;
+    }
+   
     $proyectos = DB::table('Proyecto AS a')
       ->leftJoin('Proyecto_integrante AS b', 'b.proyecto_id', '=', 'a.id')
       ->leftJoin('Usuario_investigador AS c', 'c.id', '=', 'b.investigador_id')
@@ -37,7 +50,10 @@ class ProyectoController extends Controller {
       ->groupBy('a.id', 'c.id', 'd.id', 'f.id', 'g.id')
       ->get();
 
-    $pdf = Pdf::loadView('admin.reportes.proyectoPDF', ['lista' => $proyectos, 'periodo' => $periodo]);
+    
+    $pdf = Pdf::loadView('admin.reportes.proyectoPDF', ['lista' => $proyectos, 'periodo' => $periodo ]);
     return $pdf->stream();
   }
+
+
 }
